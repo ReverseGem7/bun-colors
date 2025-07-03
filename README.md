@@ -61,8 +61,3 @@ Applies ANSI styling and returns the styled text.
 - `blink`
 - `inverse`
 - `hidden`
-
-## Requirements
-
-- Bun environment.
-
