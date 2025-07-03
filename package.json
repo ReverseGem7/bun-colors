@@ -1,0 +1,12 @@
+{
+  "name": "bun-colors",
+  "module": "index.ts",
+  "version": "1.0.1",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
