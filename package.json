@@ -2,7 +2,7 @@
   "name": "bun-colors",
   "module": "index.ts",
   "license": "MIT",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
