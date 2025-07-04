@@ -4,7 +4,7 @@ A simple utility to apply ANSI text styling and colors in terminal output using 
 
 > [!IMPORTANT]  
 > **Bun required at build time** — This utility depends on Bun’s color API and macro system to generate ANSI escape sequences.  
-> However, once compiled (e.g. using `with { type: "macro" }`), the output is plain ANSI text and can be used in **any JavaScript runtime**, including **Node.js**, **Deno**, or **browsers** with terminal emulation. **See:** [Using Bun macro](#using-bun-macro)
+> However, once compiled (e.g. using `with { type: "macro" }`), the output is plain ANSI text and can be used in **any JavaScript runtime**, including **Node.js**, **Deno**, or **browsers** with terminal emulation. **See:** [Using Bun macro](#ussing-bun-macro)
 
 ## Features
 
