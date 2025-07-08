@@ -1,25 +1,11 @@
-import { inspect } from "node:util";
+import { styleText } from "util";
 
-type Modifiers =
-  | "faint"
-  | "strikethrough"
-  | "conceal"
-  | "swapColors"
-  | "doubleUnderline"
-  | "framed"
-  | "overlined"
-  | "bold"
-  | "dim"
-  | "italic"
-  | "underline"
-  | "blink"
-  | "inverse"
-  | "hidden";
+type Options = Parameters<typeof styleText>[0];
 
-type StyleOptions = {
+export type StyleOptions = {
   textColor?: Bun.ColorInput;
   backgroundColor?: Bun.ColorInput;
-  style?: Modifiers[];
+  style?: Options;
 };
 
 /**
@@ -47,24 +33,22 @@ function convertTextAnsiToBgAnsi(ansi: string): string {
   return ansi;
 }
 
-const esc = (code: number) => `\x1b[${code}m`;
-
 /**
- * Applies ANSI styles (colors and modifiers) to a text string for terminal output formatting.
+ * Applies ANSI styles to text for terminal output formatting.
+ * 
+ * Combines foreground/background colors and text modifiers using ANSI escape sequences.
+ * Colors are generated using Bun.color, while modifiers use Node.js inspect.colors.
+ * 
+ * Returns unmodified text if ANSI colors are disabled via Bun.enableANSIColors.
  *
- * Uses `Bun.color` to generate ANSI sequences from color inputs,
- * and Node.js `inspect.colors` for modifiers (bold, italic, underline, etc.).
- *
- * If `Bun.enableANSIColors` is disabled, the original text is returned unchanged.
- *
- * @param text The text to style.
- * @param opts Style options:
- *   - textColor: foreground text color, accepts `Bun.ColorInput`
- *   - backgroundColor: background color, accepts `Bun.ColorInput`
- *   - style: array of modifiers to apply, e.g., ['bold', 'underline', 'italic']
- *
- * @returns The text with applied ANSI escape sequences.
- *
+ * @param text - Text string to apply styling to
+ * @param opts - Styling configuration object:
+ *   - textColor: Text color (Bun.ColorInput)
+ *   - backgroundColor: Background color (Bun.ColorInput) 
+ *   - style: Text modifiers like 'bold', 'italic', etc.
+ * 
+ * @returns Styled text with ANSI sequences
+ * 
  * @example
  * style("Hello World!", {
  *   textColor: "cyan",
@@ -84,20 +68,5 @@ export const style = (text: string, opts: StyleOptions): string => {
   }
   if (fg) center += Bun.color(fg, "ansi");
 
-  const openSeq: string[] = [];
-  const closeSeq: string[] = [];
-
-  if (style) {
-    for (const key of style) {
-      const codes = inspect.colors[key];
-      if (codes) {
-        openSeq.push(esc(codes[0]));
-        closeSeq.unshift(esc(codes[1]));
-      }
-    }
-  }
-
-  return `${esc(0)}${openSeq.join("")}${center}${text}${closeSeq.join("")}${esc(
-    0
-  )}`;
+  return styleText(style ?? [], `${center}${text}`) + "\x1b[0m";
 };
